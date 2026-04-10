@@ -176,6 +176,15 @@ body {
   background: #fff;
 }
 
+.filter-field select {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  font: inherit;
+  background: #fff;
+}
+
 .filter-actions {
   display: flex;
   gap: 0.75rem;

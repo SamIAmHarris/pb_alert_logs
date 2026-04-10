@@ -17,6 +17,7 @@ def fetch_recent_logs(
     start_at: str | None = None,
     end_before: str | None = None,
     user_ids: list[str] | None = None,
+    log_type: str | None = None,
 ) -> list[dict[str, Any]]:
     settings = get_settings()
     client = get_supabase_client()
@@ -38,6 +39,8 @@ def fetch_recent_logs(
             query = query.eq("user_id", user_ids[0])
         else:
             query = query.in_("user_id", user_ids)
+    if log_type:
+        query = query.eq("type", log_type)
 
     response = query.execute()
 

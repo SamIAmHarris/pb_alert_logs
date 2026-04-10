@@ -33,6 +33,17 @@
           placeholder="One user or comma-separated users"
         />
       </div>
+      <div class="filter-field">
+        <label for="log_type">Event type</label>
+        <select id="log_type" name="log_type">
+          <option value="">All event types</option>
+          {% for option in log_type_options %}
+            <option value="{{ option.value }}" {% if filters.log_type == option.value %}selected{% endif %}>
+              {{ option.label }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
       <div class="filter-actions">
         <button type="submit">Apply filters</button>
         <button type="submit" class="secondary-button">Refresh</button>

@@ -12,6 +12,13 @@ from app.supabase_client import fetch_recent_logs
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+LOG_TYPES = [
+    "INITIALIZE_SUCCESS",
+    "INITIALIZE_FAILURE",
+    "STARTED_TRACKING",
+    "TRACK_ONCE",
+    "STOPPED_TRACKING",
+]
 
 
 def _display_value(value: Any) -> str:
@@ -54,6 +61,10 @@ def _is_authenticated(request: Request) -> bool:
     return bool(request.session.get("authenticated"))
 
 
+def _title_case_type(value: str) -> str:
+    return value.replace("_", " ").title()
+
+
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
     if not _is_authenticated(request):
@@ -72,6 +83,7 @@ async def index(request: Request) -> HTMLResponse:
     start_date = request.query_params.get("start_date", "").strip()
     end_date = request.query_params.get("end_date", "").strip()
     users = request.query_params.get("users", "").strip()
+    log_type = request.query_params.get("log_type", "").strip()
 
     try:
         start_value = _parse_date(start_date) if start_date else None
@@ -80,6 +92,8 @@ async def index(request: Request) -> HTMLResponse:
 
         if start_value and end_value and start_value > end_value:
             raise ValueError("Start date must be on or before end date.")
+        if log_type and log_type not in LOG_TYPES:
+            raise ValueError("Invalid event type.")
 
         start_at = None
         end_before = None
@@ -93,6 +107,7 @@ async def index(request: Request) -> HTMLResponse:
             start_at=start_at,
             end_before=end_before,
             user_ids=user_ids,
+            log_type=log_type or None,
         )
         logs = [
             {
@@ -122,7 +137,12 @@ async def index(request: Request) -> HTMLResponse:
                 "start_date": start_date,
                 "end_date": end_date,
                 "users": users,
+                "log_type": log_type,
             },
+            "log_type_options": [
+                {"value": value, "label": _title_case_type(value)}
+                for value in LOG_TYPES
+            ],
         },
     )
 
