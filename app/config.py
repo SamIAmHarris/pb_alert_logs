@@ -13,6 +13,8 @@ class Settings:
         self.supabase_key = os.getenv("SUPABASE_KEY", "").strip()
         self.supabase_logs_table = os.getenv("SUPABASE_LOGS_TABLE", "alert_logs").strip() or "alert_logs"
         self.default_log_limit = int(os.getenv("DEFAULT_LOG_LIMIT", "100"))
+        self.app_password = os.getenv("APP_PASSWORD", "arsenal")
+        self.session_secret = os.getenv("SESSION_SECRET", "change-me-in-production")
 
         missing = [
             name

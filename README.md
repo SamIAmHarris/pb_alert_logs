@@ -17,6 +17,8 @@ A very small FastAPI app that renders the latest rows from the Supabase `alert_l
 - `SUPABASE_KEY`
 - `SUPABASE_LOGS_TABLE` defaults to `alert_logs`
 - `DEFAULT_LOG_LIMIT` defaults to `100`
+- `APP_PASSWORD` defaults to `arsenal`
+- `SESSION_SECRET` should be set to a random secret in production
 
 ## Deploying on Render
 
@@ -40,3 +42,5 @@ Set these environment variables in Render:
 - `SUPABASE_KEY`
 - `SUPABASE_LOGS_TABLE=alert_logs`
 - `DEFAULT_LOG_LIMIT=100`
+- `APP_PASSWORD=arsenal`
+- `SESSION_SECRET=<random-secret>`

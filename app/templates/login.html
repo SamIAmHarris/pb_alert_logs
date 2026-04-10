@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Enter Password{% endblock %}
+
+{% block content %}
+  <section class="auth-shell">
+    <div class="auth-card">
+      <h1>Alert Logs</h1>
+      <p>Enter the password to view this site.</p>
+
+      {% if error_message %}
+        <div class="alert alert-error">
+          <strong>Access denied.</strong>
+          <span>{{ error_message }}</span>
+        </div>
+      {% endif %}
+
+      <form method="post" action="/login" class="auth-form">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+        <button type="submit">Enter</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

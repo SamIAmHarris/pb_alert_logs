@@ -5,8 +5,13 @@
 {% block content %}
   <section class="panel">
     <header class="panel-header">
-      <h1>Alert Logs</h1>
-      <p>Latest records from Supabase.</p>
+      <div>
+        <h1>Alert Logs</h1>
+        <p>Latest records from Supabase.</p>
+      </div>
+      <form method="post" action="/logout">
+        <button type="submit" class="secondary-button">Log out</button>
+      </form>
     </header>
 
     {% if error_message %}

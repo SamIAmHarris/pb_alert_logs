@@ -27,6 +27,72 @@ body {
   padding: 2rem;
 }
 
+.auth-shell {
+  min-height: calc(100vh - 4rem);
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(100%, 420px);
+  background: var(--panel-bg);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(60, 42, 18, 0.08);
+}
+
+.auth-card h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.auth-card p {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+.auth-form label {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.auth-form button,
+.secondary-button {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-form button {
+  background: #1f1b16;
+  color: #fffdf9;
+}
+
+.secondary-button {
+  background: #ece5d8;
+  color: var(--text);
+}
+
 .panel {
   max-width: 1400px;
   margin: 0 auto;
@@ -40,6 +106,10 @@ body {
 .panel-header {
   padding: 1.5rem 1.5rem 1rem;
   border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .panel-header h1 {
@@ -117,8 +187,17 @@ tbody tr:nth-child(even) {
     padding: 1rem;
   }
 
+  .auth-shell {
+    min-height: calc(100vh - 2rem);
+  }
+
   .panel-header h1 {
     font-size: 1.6rem;
+  }
+
+  .panel-header {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   th,

@@ -1,10 +1,12 @@
 from datetime import datetime
+from hmac import compare_digest
 from typing import Any
 
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Form, Request
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from app.config import get_settings
 from app.supabase_client import fetch_recent_logs
 
 
@@ -34,8 +36,23 @@ def _format_timestamp(value: Any) -> str:
     return parsed.strftime("%Y-%m-%d %H:%M:%S %Z") or parsed.isoformat()
 
 
+def _is_authenticated(request: Request) -> bool:
+    return bool(request.session.get("authenticated"))
+
+
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
+    if not _is_authenticated(request):
+        return templates.TemplateResponse(
+            request,
+            "login.html",
+            {
+                "request": request,
+                "error_message": None,
+            },
+            status_code=401,
+        )
+
     logs: list[dict[str, str]] = []
     error_message: str | None = None
 
@@ -65,3 +82,27 @@ async def index(request: Request) -> HTMLResponse:
             "error_message": error_message,
         },
     )
+
+
+@router.post("/login", response_class=HTMLResponse)
+async def login(request: Request, password: str = Form(...)) -> HTMLResponse:
+    settings = get_settings()
+    if compare_digest(password, settings.app_password):
+        request.session["authenticated"] = True
+        return RedirectResponse(url="/", status_code=303)
+
+    return templates.TemplateResponse(
+        request,
+        "login.html",
+        {
+            "request": request,
+            "error_message": "Incorrect password.",
+        },
+        status_code=401,
+    )
+
+
+@router.post("/logout")
+async def logout(request: Request) -> RedirectResponse:
+    request.session.clear()
+    return RedirectResponse(url="/", status_code=303)
