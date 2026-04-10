@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: alert-log-viewer
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SUPABASE_LOGS_TABLE
+        value: alert_logs
+      - key: DEFAULT_LOG_LIMIT
+        value: 100

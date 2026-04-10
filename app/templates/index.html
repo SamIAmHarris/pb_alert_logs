@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Alert Logs{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <header class="panel-header">
+      <h1>Alert Logs</h1>
+      <p>Latest records from Supabase.</p>
+    </header>
+
+    {% if error_message %}
+      <div class="alert alert-error">
+        <strong>Unable to load logs.</strong>
+        <span>{{ error_message }}</span>
+      </div>
+    {% endif %}
+
+    {% if logs %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Created At</th>
+              <th>User</th>
+              <th>Type</th>
+              <th>Permission</th>
+              <th>Entitlement</th>
+              <th>Environment</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs %}
+              <tr>
+                <td>{{ log.created_at }}</td>
+                <td>{{ log.user_id }}</td>
+                <td>{{ log.type }}</td>
+                <td>{{ log.permission }}</td>
+                <td>{{ log.entitlement }}</td>
+                <td>{{ log.environment }}</td>
+                <td class="error-cell">{{ log.error }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% elif not error_message %}
+      <div class="empty-state">No logs found.</div>
+    {% endif %}
+  </section>
+{% endblock %}
