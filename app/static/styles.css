@@ -93,6 +93,10 @@ body {
   color: var(--text);
 }
 
+.secondary-link {
+  text-decoration: none;
+}
+
 .panel {
   max-width: 1400px;
   margin: 0 auto;
@@ -137,6 +141,58 @@ body {
 .alert span {
   display: block;
   margin-top: 0.25rem;
+}
+
+.filters {
+  padding: 1rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.filter-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.filter-field-wide {
+  grid-column: span 2;
+}
+
+.filter-field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.filter-field input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.filter-actions button {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background: #1f1b16;
+  color: #fffdf9;
 }
 
 .table-wrap {
@@ -198,6 +254,14 @@ tbody tr:nth-child(even) {
   .panel-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-field-wide {
+    grid-column: span 1;
   }
 
   th,

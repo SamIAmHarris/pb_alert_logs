@@ -12,17 +12,33 @@ def get_supabase_client() -> Client:
     return create_client(settings.supabase_url, settings.supabase_key)
 
 
-def fetch_recent_logs(limit: int | None = None) -> list[dict[str, Any]]:
+def fetch_recent_logs(
+    limit: int | None = None,
+    start_at: str | None = None,
+    end_before: str | None = None,
+    user_ids: list[str] | None = None,
+) -> list[dict[str, Any]]:
     settings = get_settings()
     client = get_supabase_client()
     query_limit = limit or settings.default_log_limit
 
-    response = (
+    query = (
         client.table(settings.supabase_logs_table)
         .select("id, created_at, user_id, type, permission, entitlement, environment, error")
         .order("created_at", desc=True)
         .limit(query_limit)
-        .execute()
     )
+
+    if start_at:
+        query = query.gte("created_at", start_at)
+    if end_before:
+        query = query.lt("created_at", end_before)
+    if user_ids:
+        if len(user_ids) == 1:
+            query = query.eq("user_id", user_ids[0])
+        else:
+            query = query.in_("user_id", user_ids)
+
+    response = query.execute()
 
     return response.data or []

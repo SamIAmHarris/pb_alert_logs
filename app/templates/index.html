@@ -14,6 +14,31 @@
       </form>
     </header>
 
+    <form method="get" action="/" class="filters">
+      <div class="filter-field">
+        <label for="start_date">Start date</label>
+        <input id="start_date" name="start_date" type="date" value="{{ filters.start_date }}" />
+      </div>
+      <div class="filter-field">
+        <label for="end_date">End date</label>
+        <input id="end_date" name="end_date" type="date" value="{{ filters.end_date }}" />
+      </div>
+      <div class="filter-field filter-field-wide">
+        <label for="users">Users</label>
+        <input
+          id="users"
+          name="users"
+          type="text"
+          value="{{ filters.users }}"
+          placeholder="One user or comma-separated users"
+        />
+      </div>
+      <div class="filter-actions">
+        <button type="submit">Apply filters</button>
+        <a href="/" class="secondary-button secondary-link">Clear</a>
+      </div>
+    </form>
+
     {% if error_message %}
       <div class="alert alert-error">
         <strong>Unable to load logs.</strong>
@@ -51,7 +76,7 @@
         </table>
       </div>
     {% elif not error_message %}
-      <div class="empty-state">No logs found.</div>
+      <div class="empty-state">No logs found for the current filters.</div>
     {% endif %}
   </section>
 {% endblock %}

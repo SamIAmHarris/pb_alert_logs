@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime, time, timedelta, timezone
 from hmac import compare_digest
 from typing import Any
 
@@ -36,6 +36,20 @@ def _format_timestamp(value: Any) -> str:
     return parsed.strftime("%Y-%m-%d %H:%M:%S %Z") or parsed.isoformat()
 
 
+def _parse_date(value: str | None) -> date | None:
+    if not value:
+        return None
+    return date.fromisoformat(value)
+
+
+def _parse_users(value: str | None) -> list[str]:
+    if not value:
+        return []
+
+    parts = value.replace("\n", ",").split(",")
+    return [part.strip() for part in parts if part.strip()]
+
+
 def _is_authenticated(request: Request) -> bool:
     return bool(request.session.get("authenticated"))
 
@@ -55,9 +69,31 @@ async def index(request: Request) -> HTMLResponse:
 
     logs: list[dict[str, str]] = []
     error_message: str | None = None
+    start_date = request.query_params.get("start_date", "").strip()
+    end_date = request.query_params.get("end_date", "").strip()
+    users = request.query_params.get("users", "").strip()
 
     try:
-        rows = fetch_recent_logs()
+        start_value = _parse_date(start_date) if start_date else None
+        end_value = _parse_date(end_date) if end_date else None
+        user_ids = _parse_users(users)
+
+        if start_value and end_value and start_value > end_value:
+            raise ValueError("Start date must be on or before end date.")
+
+        start_at = None
+        end_before = None
+        if start_value:
+            start_at = datetime.combine(start_value, time.min, tzinfo=timezone.utc).isoformat()
+        if end_value:
+            next_day = end_value + timedelta(days=1)
+            end_before = datetime.combine(next_day, time.min, tzinfo=timezone.utc).isoformat()
+
+        rows = fetch_recent_logs(
+            start_at=start_at,
+            end_before=end_before,
+            user_ids=user_ids,
+        )
         logs = [
             {
                 "created_at": _format_timestamp(row.get("created_at")),
@@ -70,6 +106,8 @@ async def index(request: Request) -> HTMLResponse:
             }
             for row in rows
         ]
+    except ValueError as exc:
+        error_message = str(exc)
     except Exception as exc:
         error_message = str(exc)
 
@@ -80,6 +118,11 @@ async def index(request: Request) -> HTMLResponse:
             "request": request,
             "logs": logs,
             "error_message": error_message,
+            "filters": {
+                "start_date": start_date,
+                "end_date": end_date,
+                "users": users,
+            },
         },
     )
 
