@@ -43,7 +43,9 @@ def _format_timestamp(value: Any) -> str:
     except ValueError:
         return text
 
-    return parsed.strftime("%Y-%m-%d %H:%M:%S %Z") or parsed.isoformat()
+    month_day = parsed.strftime("%b %d").replace(" 0", " ")
+    time_text = parsed.strftime("%I:%M %p").lstrip("0")
+    return f"{month_day}, {time_text}"
 
 
 def _parse_date(value: str | None) -> date | None:
@@ -117,6 +119,7 @@ async def index(request: Request) -> HTMLResponse:
                 "created_at": _format_timestamp(row.get("created_at")),
                 "user_id": _display_value(row.get("user_id")),
                 "type": _display_value(row.get("type")),
+                "type_icon": "!" if _has_text(row.get("error")) else "+",
                 "type_state": "type-error" if _has_text(row.get("error")) else "type-success",
                 "permission": _display_value(row.get("permission")),
                 "entitlement": _display_value(row.get("entitlement")),

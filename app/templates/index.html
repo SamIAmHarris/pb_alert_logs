@@ -77,7 +77,12 @@
               <tr>
                 <td>{{ log.created_at }}</td>
                 <td>{{ log.user_id }}</td>
-                <td class="{{ log.type_state }}">{{ log.type }}</td>
+                <td class="{{ log.type_state }}">
+                  <span class="type-badge">
+                    <span class="type-icon">{{ log.type_icon }}</span>
+                    <span>{{ log.type }}</span>
+                  </span>
+                </td>
                 <td>{{ log.permission }}</td>
                 <td>{{ log.entitlement }}</td>
                 <td>{{ log.environment }}</td>
