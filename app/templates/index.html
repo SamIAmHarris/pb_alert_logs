@@ -34,9 +34,9 @@
         />
       </div>
       <div class="filter-field">
-        <label for="log_type">Event type</label>
+        <label for="log_type">Log Type</label>
         <select id="log_type" name="log_type">
-          <option value="">All event types</option>
+          <option value="">All log types</option>
           {% for option in log_type_options %}
             <option value="{{ option.value }}" {% if filters.log_type == option.value %}selected{% endif %}>
               {{ option.label }}
