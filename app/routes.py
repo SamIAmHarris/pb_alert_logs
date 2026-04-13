@@ -120,7 +120,7 @@ async def index(request: Request) -> HTMLResponse:
                 "created_at_raw": _display_value(row.get("created_at")),
                 "user_id": _display_value(row.get("user_id")),
                 "type": _display_value(row.get("type")),
-                "type_icon": "!" if _has_text(row.get("error")) else "+",
+                "type_icon": "x" if _has_text(row.get("error")) else "✓",
                 "type_state": "type-error" if _has_text(row.get("error")) else "type-success",
                 "permission": _display_value(row.get("permission")),
                 "entitlement": _display_value(row.get("entitlement")),
