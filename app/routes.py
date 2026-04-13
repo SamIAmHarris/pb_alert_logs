@@ -13,8 +13,7 @@ from app.supabase_client import fetch_recent_logs
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 LOG_TYPES = [
-    "INITIALIZE_SUCCESS",
-    "INITIALIZE_FAILURE",
+    "INITIALIZE",
     "STARTED_TRACKING",
     "TRACK_ONCE",
     "STOPPED_TRACKING",
@@ -27,6 +26,10 @@ def _display_value(value: Any) -> str:
     if isinstance(value, str) and not value.strip():
         return "-"
     return str(value)
+
+
+def _has_text(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
 
 
 def _format_timestamp(value: Any) -> str:
@@ -114,6 +117,7 @@ async def index(request: Request) -> HTMLResponse:
                 "created_at": _format_timestamp(row.get("created_at")),
                 "user_id": _display_value(row.get("user_id")),
                 "type": _display_value(row.get("type")),
+                "type_state": "type-error" if _has_text(row.get("error")) else "type-success",
                 "permission": _display_value(row.get("permission")),
                 "entitlement": _display_value(row.get("entitlement")),
                 "environment": _display_value(row.get("environment")),

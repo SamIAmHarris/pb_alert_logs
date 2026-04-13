@@ -236,6 +236,16 @@ tbody tr:nth-child(even) {
   background: rgba(217, 210, 198, 0.18);
 }
 
+.type-success {
+  color: #1f7a34;
+  font-weight: 600;
+}
+
+.type-error {
+  color: #b0302f;
+  font-weight: 600;
+}
+
 .error-cell {
   min-width: 320px;
   white-space: pre-wrap;
