@@ -117,6 +117,7 @@ async def index(request: Request) -> HTMLResponse:
         logs = [
             {
                 "created_at": _format_timestamp(row.get("created_at")),
+                "created_at_raw": _display_value(row.get("created_at")),
                 "user_id": _display_value(row.get("user_id")),
                 "type": _display_value(row.get("type")),
                 "type_icon": "!" if _has_text(row.get("error")) else "+",

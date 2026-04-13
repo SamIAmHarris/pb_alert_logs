@@ -44,6 +44,14 @@
           {% endfor %}
         </select>
       </div>
+      <div class="filter-field">
+        <label for="timezone_display">Timezone</label>
+        <select id="timezone_display" class="js-timezone-select">
+          <option value="browser">Browser local time</option>
+          <option value="America/New_York">Eastern</option>
+          <option value="America/Chicago">Central</option>
+        </select>
+      </div>
       <div class="filter-actions">
         <button type="submit">Apply filters</button>
         <button type="submit" class="secondary-button">Refresh</button>
@@ -75,7 +83,12 @@
           <tbody>
             {% for log in logs %}
               <tr>
-                <td>{{ log.created_at }}</td>
+                <td
+                  class="timestamp-cell"
+                  data-timestamp="{{ log.created_at_raw }}"
+                >
+                  {{ log.created_at }}
+                </td>
                 <td>{{ log.user_id }}</td>
                 <td class="{{ log.type_state }}">
                   <span class="type-badge">
@@ -96,4 +109,59 @@
       <div class="empty-state">No logs found for the current filters.</div>
     {% endif %}
   </section>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "alert-log-timezone";
+      const select = document.querySelector(".js-timezone-select");
+      const cells = document.querySelectorAll(".timestamp-cell");
+
+      if (!select || cells.length === 0) {
+        return;
+      }
+
+      const savedValue = window.localStorage.getItem(STORAGE_KEY) || "browser";
+      select.value = savedValue;
+
+      function formatTimestamp(rawValue, timezoneMode) {
+        if (!rawValue || rawValue === "-") {
+          return rawValue;
+        }
+
+        const parsed = new Date(rawValue);
+        if (Number.isNaN(parsed.getTime())) {
+          return rawValue;
+        }
+
+        const options = {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        };
+
+        if (timezoneMode !== "browser") {
+          options.timeZone = timezoneMode;
+        }
+
+        return new Intl.DateTimeFormat("en-US", options).format(parsed);
+      }
+
+      function applyTimezone(timezoneMode) {
+        cells.forEach((cell) => {
+          const rawValue = cell.dataset.timestamp;
+          cell.textContent = formatTimestamp(rawValue, timezoneMode);
+        });
+      }
+
+      applyTimezone(savedValue);
+
+      select.addEventListener("change", (event) => {
+        const nextValue = event.target.value;
+        window.localStorage.setItem(STORAGE_KEY, nextValue);
+        applyTimezone(nextValue);
+      });
+    })();
+  </script>
 {% endblock %}
