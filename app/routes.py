@@ -18,6 +18,7 @@ LOG_TYPES = [
     "TRACK_ONCE",
     "STOPPED_TRACKING",
 ]
+PLATFORMS = ["ios", "android"]
 
 
 def _display_value(value: Any) -> str:
@@ -89,6 +90,7 @@ async def index(request: Request) -> HTMLResponse:
     end_date = request.query_params.get("end_date", "").strip()
     users = request.query_params.get("users", "").strip()
     log_type = request.query_params.get("log_type", "").strip()
+    platform = request.query_params.get("platform", "").strip().lower()
 
     try:
         start_value = _parse_date(start_date) if start_date else None
@@ -99,6 +101,8 @@ async def index(request: Request) -> HTMLResponse:
             raise ValueError("Start date must be on or before end date.")
         if log_type and log_type not in LOG_TYPES:
             raise ValueError("Invalid event type.")
+        if platform and platform not in PLATFORMS:
+            raise ValueError("Invalid platform.")
 
         start_at = None
         end_before = None
@@ -113,6 +117,7 @@ async def index(request: Request) -> HTMLResponse:
             end_before=end_before,
             user_ids=user_ids,
             log_type=log_type or None,
+            platform=platform or None,
         )
         logs = [
             {
@@ -146,10 +151,15 @@ async def index(request: Request) -> HTMLResponse:
                 "end_date": end_date,
                 "users": users,
                 "log_type": log_type,
+                "platform": platform,
             },
             "log_type_options": [
                 {"value": value, "label": _title_case_type(value)}
                 for value in LOG_TYPES
+            ],
+            "platform_options": [
+                {"value": "ios", "label": "iOS"},
+                {"value": "android", "label": "Android"},
             ],
         },
     )

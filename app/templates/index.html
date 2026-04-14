@@ -45,6 +45,17 @@
         </select>
       </div>
       <div class="filter-field">
+        <label for="platform">Platform</label>
+        <select id="platform" name="platform">
+          <option value="">All platforms</option>
+          {% for option in platform_options %}
+            <option value="{{ option.value }}" {% if filters.platform == option.value %}selected{% endif %}>
+              {{ option.label }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="filter-field">
         <label for="timezone_display">Timezone</label>
         <select id="timezone_display" class="js-timezone-select">
           <option value="browser">Browser local time</option>
