@@ -124,7 +124,7 @@ async def index(request: Request) -> HTMLResponse:
                 "type_state": "type-error" if _has_text(row.get("error")) else "type-success",
                 "permission": _display_value(row.get("permission")),
                 "entitlement": _display_value(row.get("entitlement")),
-                "environment": _display_value(row.get("environment")),
+                "platform": _display_value(row.get("platform")),
                 "error": _display_value(row.get("error")),
             }
             for row in rows
