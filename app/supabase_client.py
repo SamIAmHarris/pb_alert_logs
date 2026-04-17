@@ -26,7 +26,7 @@ def fetch_recent_logs(
 
     query = (
         client.table(settings.supabase_logs_table)
-        .select("id, created_at, user_id, type, permission, entitlement, platform, error")
+        .select("id, created_at, user_id, type, permission, entitlement, platform, location, source, error")
         .order("created_at", desc=True)
         .limit(query_limit)
     )

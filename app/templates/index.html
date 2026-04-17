@@ -88,6 +88,7 @@
               <th>Permission</th>
               <th>Entitlement</th>
               <th>Platform</th>
+              <th>Location / Source</th>
               <th>Error</th>
             </tr>
           </thead>
@@ -110,6 +111,7 @@
                 <td>{{ log.permission }}</td>
                 <td>{{ log.entitlement }}</td>
                 <td>{{ log.platform }}</td>
+                <td>{{ log.location_source }}</td>
                 <td class="error-cell">{{ log.error }}</td>
               </tr>
             {% endfor %}

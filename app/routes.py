@@ -17,6 +17,7 @@ LOG_TYPES = [
     "STARTED_TRACKING",
     "TRACK_ONCE",
     "STOPPED_TRACKING",
+    "LOCATION_RECEIVED"
 ]
 PLATFORMS = ["ios", "android"]
 
@@ -31,6 +32,19 @@ def _display_value(value: Any) -> str:
 
 def _has_text(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def _format_location_source(location: Any, source: Any) -> str:
+    location_text = str(location).strip() if _has_text(location) else ""
+    source_text = str(source).strip() if _has_text(source) else ""
+
+    if location_text and source_text:
+        return f"{location_text}: {source_text}"
+    if location_text:
+        return location_text
+    if source_text:
+        return source_text
+    return "-"
 
 
 def _format_timestamp(value: Any) -> str:
@@ -130,6 +144,7 @@ async def index(request: Request) -> HTMLResponse:
                 "permission": _display_value(row.get("permission")),
                 "entitlement": _display_value(row.get("entitlement")),
                 "platform": _display_value(row.get("platform")),
+                "location_source": _format_location_source(row.get("location"), row.get("source")),
                 "error": _display_value(row.get("error")),
             }
             for row in rows
