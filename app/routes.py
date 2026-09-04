@@ -17,9 +17,15 @@ LOG_TYPES = [
     "STARTED_TRACKING",
     "TRACK_ONCE",
     "STOPPED_TRACKING",
-    "LOCATION_RECEIVED"
+    "LOCATION_RECEIVED",
 ]
 PLATFORMS = ["ios", "android"]
+STATIC_RECENT_LOCATIONS = [
+    {"label": "Point 1", "lat": 41.8781, "lng": -87.6298},
+    {"label": "Point 2", "lat": 41.8814, "lng": -87.6232},
+    {"label": "Point 3", "lat": 41.8842, "lng": -87.6324},
+    {"label": "Point 4", "lat": 41.8891, "lng": -87.6268},
+]
 
 
 def _display_value(value: Any) -> str:
@@ -85,18 +91,22 @@ def _title_case_type(value: str) -> str:
     return value.replace("_", " ").title()
 
 
+def _login_response(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request,
+        "login.html",
+        {
+            "request": request,
+            "error_message": None,
+        },
+        status_code=401,
+    )
+
+
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request) -> HTMLResponse:
     if not _is_authenticated(request):
-        return templates.TemplateResponse(
-            request,
-            "login.html",
-            {
-                "request": request,
-                "error_message": None,
-            },
-            status_code=401,
-        )
+        return _login_response(request)
 
     logs: list[dict[str, str]] = []
     error_message: str | None = None
@@ -176,6 +186,21 @@ async def index(request: Request) -> HTMLResponse:
                 {"value": "ios", "label": "iOS"},
                 {"value": "android", "label": "Android"},
             ],
+        },
+    )
+
+
+@router.get("/map", response_class=HTMLResponse)
+async def map_view(request: Request) -> HTMLResponse:
+    if not _is_authenticated(request):
+        return _login_response(request)
+
+    return templates.TemplateResponse(
+        request,
+        "map.html",
+        {
+            "request": request,
+            "points": STATIC_RECENT_LOCATIONS,
         },
     )
 

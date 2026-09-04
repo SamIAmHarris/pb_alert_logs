@@ -116,6 +116,23 @@ body {
   gap: 1rem;
 }
 
+.panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 1.5rem;
+  row-gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.panel-actions > * {
+  flex: 0 0 auto;
+}
+
+.panel-actions form {
+  margin: 0;
+}
+
 .panel-header h1 {
   margin: 0;
   font-size: 2rem;
@@ -280,6 +297,58 @@ tbody tr:nth-child(even) {
   color: var(--muted);
 }
 
+.map-panel {
+  max-width: 1500px;
+}
+
+.map-stack {
+  display: grid;
+  gap: 0;
+}
+
+.map-canvas {
+  height: 620px;
+  min-height: 620px;
+  width: 100%;
+  border-bottom: 1px solid var(--line);
+  background: #efe8da;
+}
+
+.map-sidebar {
+  padding: 1.5rem;
+  background: rgba(248, 244, 236, 0.72);
+}
+
+.map-panel-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.85rem;
+}
+
+.map-panel-actions form {
+  margin: 0;
+}
+
+.map-sidebar h2 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
+.map-point-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.map-point-list li span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 @media (max-width: 720px) {
   .page-shell {
     padding: 1rem;
@@ -300,6 +369,16 @@ tbody tr:nth-child(even) {
 
   .filters {
     grid-template-columns: 1fr;
+  }
+
+  .map-panel-actions {
+    align-items: flex-start;
+  }
+
+  .map-canvas {
+    height: 420px;
+    min-height: 420px;
+    border-bottom: 1px solid var(--line);
   }
 
   .filter-field-wide {
