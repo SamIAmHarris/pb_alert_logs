@@ -1,5 +1,10 @@
 .env
+.env.*
+!.env.example
+firebase-service-account*.json
+service-account*.json
 .venv/
 .idea/
 __pycache__/
 *.py[cod]
+.pytest_cache/
